@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Валентинка 💌</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: white;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Блоки шагов */
+.container {
+    position: absolute;
+    text-align: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    opacity: 0;
+    transform: translateY(15px);
+    width: 90%;
+    max-width: 420px;
+}
+
+.container.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hidden {
+    pointer-events: none;
+}
+
+/* Сердечки */
+.heart {
+    position: fixed;
+    top: -10px;
+    animation: fall linear forwards;
+    opacity: 0.6;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh); }
+}
+
+/* Конверт */
+.envelope {
+    width: 220px;
+    height: 140px;
+    background: #ffc8dd;
+    margin: 0 auto 20px;
+    position: relative;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: transform 0.6s ease;
+}
+
+.envelope:before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    border-left: 110px solid transparent;
+    border-right: 110px solid transparent;
+    border-top: 70px solid #ffafcc;
+    transform-origin: top;
+    transition: transform 0.8s ease;
+}
+
+.envelope.open:before {
+    transform: rotateX(180deg);
+}
+
+/* Восковая печать */
+.seal {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: radial-gradient(circle at 30% 30%, #b3003c, #7a0026);
+    border-radius: 50%;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow:
+        inset 0 3px 6px rgba(255,255,255,0.3),
+        0 5px 10px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffd6e7;
+    font-size: 20px;
+    font-family: serif;
+    font-weight: bold;
+}
+
+/* Кнопки */
+button {
+    margin: 10px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #ffafcc, #ffc8dd);
+    color: #6a2c70;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba(255, 175, 204, 0.4);
+}
+
+h1, h2 {
+    color: #b565a7;
+}
+
+p {
+    color: #7a4069;
+    line-height: 1.6;
+}
+
+/* Картинки */
+img {
+    max-width: 240px;
+    border-radius: 15px;
+}
+
+/* Центрируем 2.gif */
+#step4 img {
+    display: block;
+    margin: 20px auto;
+}
+
+/* Центрируем гиф в step3 */
+#step3 img {
+    display: block;
+    margin: 20px auto;
+}
+
+.typing {
+    border-right: 2px solid #ffafcc;
+    display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container active" id="step1">
+    <div class="envelope" onclick="openEnvelope()">
+        <div class="seal">❤</div>
+    </div>
+    <h2>У меня для тебя письмо...</h2>
+    <button onclick="goTo(2)">Далее →</button>
+</div>
+
+<div class="container hidden" id="step2">
+    <h2>Хочешь открыть?</h2>
+    <img src="./1.gif">
+    <div>
+        <button onclick="openLetter()">Открыть</button>
+        <button onclick="goTo(3)">Не-а</button>
+    </div>
+</div>
+
+<div class="container hidden" id="step3">
+    <h2>Мне кажется ты случайно сюда нажала</h2>
+    <img src="./3.gif">
+    <button onclick="goTo(2)">Еще раз..?</button>
+</div>
+
+<div class="container hidden" id="step4">
+    <h1>С днем святой Валентины, жена!!!</h1>
+    <img src="./2.gif">
+    <button onclick="goTo(5)">Далее</button>
+</div>
+
+<div class="container hidden" id="step5">
+    <h1>Моё поздравление 💌</h1>
+    <p id="finalText" class="typing"></p>
+</div>
+
+<script>
+const text = "Спасибо тебе большое за то, что ты появилась в моей жизни, это просто ахуеть какая фортуна. ❤️ Среди всех стран и всего мира мы встретились именно с тобой, и мы остаемся рядом с друг другом, поддерживаем в тяжелые времена, и веселимся наперекор всему. Ты самый особенный человечек на этом свете, безмерно люблю тебя!";
+
+function typeWriter(element, text, speed = 35) {
+    let i = 0;
+    element.innerHTML = "";
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+    typing();
+}
+
+function goTo(step) {
+    document.querySelectorAll('.container').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('hidden');
+    });
+
+    const current = document.getElementById("step" + step);
+    current.classList.remove('hidden');
+    setTimeout(() => current.classList.add('active'), 50);
+
+    if(step === 5){
+        typeWriter(document.getElementById("finalText"), text);
+    }
+}
+
+function openLetter(){
+    goTo(4);
+}
+
+function openEnvelope(){
+    document.querySelector('.envelope').classList.toggle('open');
+}
+
+function createHeart(){
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (18 + Math.random() * 20) + "px";
+    heart.style.animationDuration = (5 + Math.random() * 4) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 9000);
+}
+
+setInterval(createHeart, 400);
+</script>
+
+</body>
+</html>
